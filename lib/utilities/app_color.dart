@@ -5,14 +5,6 @@
 
 import 'package:flutter/material.dart';
 
-final ThemeData themeData = new ThemeData(
-    brightness: Brightness.light,
-    primarySwatch: AppColor.authenticBlue,
-    primaryColor: AppColor.actionBlue,
-    primaryColorBrightness: Brightness.light,
-    accentColor: AppColor.freedomRed,
-    accentColorBrightness: Brightness.light);
-
 class AppColor {
   AppColor._(); // this basically makes it so you can instantiate this class
   // Single Color Without Map
