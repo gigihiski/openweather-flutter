@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:weatherforecast/blocs/authentication/authentication_bloc.dart';
+import 'package:weatherforecast/blocs/authentication/authentication_state.dart';
+import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_page.dart';
 import 'package:weatherforecast/blocs/splash/splash_page.dart';
+
 import 'package:weatherforecast/models/app_config.dart';
 
 import 'package:weatherforecast/utilities/app_color.dart' as AppTheme;
@@ -11,7 +16,9 @@ class WeatherForecastApp extends StatelessWidget {
   /// Register All Pages on Routers
   final routes = <String, WidgetBuilder>{
     SplashPage.tag: (context) =>
-        SplashPage(logo: "assets/images/flutter_logo.png")
+        SplashPage(logo: "assets/images/flutter_logo.png"),
+    BookmarkedLocationPage.tag: (context) =>
+        BookmarkedLocationPage(title: "Locations"),
   };
 
   // This widget is the root of your application.
@@ -30,6 +37,13 @@ class WeatherForecastApp extends StatelessWidget {
             accentColor: AppTheme.AppColor.freedomRed,
             accentColorBrightness: Brightness.light),
         routes: routes,
-        home: SplashPage(logo: 'assets/images/flutter_logo.png'));
+        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if (state is AuthenticationUnauthenticated) {
+              return BookmarkedLocationPage(title: "Locations");
+            }
+            return SplashPage(logo: "assets/images/flutter_logo.png");
+          },
+        ));
   }
 }
