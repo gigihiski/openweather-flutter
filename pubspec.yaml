@@ -32,6 +32,9 @@ dependencies:
   # Networking
   dio: ^2.1.3
 
+  # Webview
+  webview_flutter: ^0.3.19+4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -53,6 +56,7 @@ flutter:
    - assets/images/flutter_logo.png
    - assets/images/compass_icon.png
    - assets/images/water_icon.png
+   - assets/html/help.html
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

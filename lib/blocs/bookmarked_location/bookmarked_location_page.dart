@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_bloc.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_state.dart';
+import 'package:weatherforecast/blocs/help/help_page.dart';
 import 'package:weatherforecast/components/app_bar.dart';
 import 'package:weatherforecast/components/bookmark_list.dart';
 import 'package:weatherforecast/models/bookmark.dart';
@@ -21,8 +22,10 @@ class BookmarkedLocationPage extends StatelessWidget {
     OWAppBar customAppBar = OWAppBar(title: title);
     customAppBar.leading = IconButton(
         icon: const Icon(Icons.bookmark),
-        onPressed: () {},
-        tooltip: 'Bookmark');
+        tooltip: 'Bookmark',
+        onPressed: () {
+          Navigator.of(context).pushNamed(HelpPage.tag);
+        });
     customAppBar.actions = <Widget>[
       IconButton(
         icon: Icon(Icons.add),

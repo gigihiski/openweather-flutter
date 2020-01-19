@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weatherforecast/blocs/authentication/authentication_bloc.dart';
 import 'package:weatherforecast/blocs/authentication/authentication_state.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_page.dart';
+import 'package:weatherforecast/blocs/help/help_page.dart';
 import 'package:weatherforecast/blocs/splash/splash_page.dart';
 
 import 'package:weatherforecast/models/app_config.dart';
@@ -19,6 +20,7 @@ class WeatherForecastApp extends StatelessWidget {
         SplashPage(logo: "assets/images/flutter_logo.png"),
     BookmarkedLocationPage.tag: (context) =>
         BookmarkedLocationPage(title: "Locations"),
+    HelpPage.tag: (context) => HelpPage(),
   };
 
   // This widget is the root of your application.
