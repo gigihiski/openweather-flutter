@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_bloc.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_state.dart';
 import 'package:weatherforecast/blocs/help/help_page.dart';
+import 'package:weatherforecast/blocs/weather_detail/weather_detail_page.dart';
 import 'package:weatherforecast/components/app_bar.dart';
 import 'package:weatherforecast/components/bookmark_list.dart';
 import 'package:weatherforecast/models/bookmark.dart';
@@ -41,12 +42,13 @@ class BookmarkedLocationPage extends StatelessWidget {
           padding: EdgeInsets.all(10.0),
           child: BlocBuilder<BookmarkedLocationBloc, BookmarkedLocationState>(
             builder: (context, state) {
-              if (state is BookmarkedLocationUninitialized || state is BookmarkedLocationFetching) {
+              if (state is BookmarkedLocationUninitialized ||
+                  state is BookmarkedLocationFetching) {
                 return Center(child: CircularProgressIndicator());
               } else if (state is BookmarkedLocationFetched) {
                 final bookmarkFetchedState = state;
                 final bookmars = bookmarkFetchedState.bookmarks;
-                return _buildTransactionWidget(bookmars);
+                return _buildBookmarkedLocationWidget(bookmars);
               }
               return Container();
             },
@@ -54,7 +56,7 @@ class BookmarkedLocationPage extends StatelessWidget {
         ));
   }
 
-  Widget _buildTransactionWidget(List<Bookmark> bookmarks) {
+  Widget _buildBookmarkedLocationWidget(List<Bookmark> bookmarks) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: bookmarks.length,
@@ -66,7 +68,14 @@ class BookmarkedLocationPage extends StatelessWidget {
                 humidity: bookmarks[index].humidity,
                 speed: bookmarks[index].windSpeed,
                 degree: bookmarks[index].windDegree),
-            onTap: () {});
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        WeatherDetailPage(title: "Today's Weather")),
+              );
+            });
       },
     );
   }
