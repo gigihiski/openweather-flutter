@@ -10,8 +10,6 @@ import 'package:weatherforecast/blocs/weather_detail/weather_detail_page.dart';
 
 import 'package:weatherforecast/models/app_config.dart';
 
-import 'package:weatherforecast/utilities/app_color.dart' as AppTheme;
-
 void main() => runApp(WeatherForecastApp());
 
 class WeatherForecastApp extends StatelessWidget {
@@ -35,12 +33,7 @@ class WeatherForecastApp extends StatelessWidget {
         debugShowCheckedModeBanner:
             (appConfig.environment == "production") ? false : true,
         title: appConfig.appName,
-        theme: ThemeData(
-            brightness: Brightness.light,
-            primaryColor: AppTheme.AppColor.actionBlue,
-            primaryColorBrightness: Brightness.light,
-            accentColor: AppTheme.AppColor.freedomRed,
-            accentColorBrightness: Brightness.light),
+        theme: appConfig.theme,
         routes: routes,
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {

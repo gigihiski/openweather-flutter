@@ -11,6 +11,9 @@ class AppConfig extends InheritedWidget {
   /// App Environment
   final String environment;
 
+  /// App Theme Data
+  final ThemeData theme;
+
   /// openweathermap.org Configuration
   final OpenWeatherConfig openWeather;
 
@@ -18,6 +21,7 @@ class AppConfig extends InheritedWidget {
   AppConfig({
     @required this.appName,
     @required this.environment,
+    @required this.theme,
     @required this.openWeather,
     @required Widget child,
   }) : super(child: child);
