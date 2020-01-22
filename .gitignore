@@ -38,3 +38,6 @@ lib/generated_plugin_registrant.dart
 
 # Configuration Files
 /lib/envs/*.dart
+
+# Android Secret Key Files
+/android/key.properties
