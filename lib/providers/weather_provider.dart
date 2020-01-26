@@ -1,70 +1,96 @@
-import 'package:weatherforecast/models/cloud.dart';
-import 'package:weatherforecast/models/main_info.dart';
+import 'package:dio/dio.dart';
+import 'package:weatherforecast/models/place_info.dart';
+
 import 'package:weatherforecast/models/weather.dart';
-import 'package:weatherforecast/models/wind.dart';
+import 'package:weatherforecast/repositories/open_weather_endpoint.dart';
 
 class WeatherProvider {
-  Future<List<AggregatedWeatherInfo>> getWeatherDetail(int cityId) async {
+  Dio _dio;
+
+  WeatherProvider() {
+    this._dio = Dio();
+  }
+
+  Future<AggregatedWeatherInfo> weatherForecastByGeographicCoordinates(
+      double latitude, double longitude) async {
     try {
-      List<AggregatedWeatherInfo> infos = List<AggregatedWeatherInfo>();
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      infos.add(AggregatedWeatherInfo(
-          cloud: Cloud(cloudinessPercentage: 30),
-          wind: Wind(speed: 20, degree: 30),
-          mainInfo: MainInfo(temperature: 25, humidity: 10),
-          cityId: 1,
-          cityName: "Surabaya",
-          timestamp: DateTime.now()));
-      return infos;
-    } catch (error, stacktrace) {
+      var headers = Map<String, dynamic>();
+      Response response = await this._dio.get(
+          OpenWeatherEndpoint.weatherForecastByGeographicCoordinate(
+              latitude, longitude),
+          options: Options(
+              headers: headers,
+              followRedirects: false,
+              receiveTimeout: 3600,
+              connectTimeout: 3600));
+      if (response.statusCode == 200) {
+        return AggregatedWeatherInfo.fromJson(response.data);
+      }
+      throw new Exception("");
+    } on DioError catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
+
+  Future<PlaceInfo> retrievePlaceInformation(
+      double latitude, double longitude) async {
+    try {
+      var headers = Map<String, dynamic>();
+      Response response = await this._dio.get(
+          OpenWeatherEndpoint.weatherForecastByGeographicCoordinate(
+              latitude, longitude),
+          options: Options(
+              headers: headers,
+              followRedirects: false,
+              receiveTimeout: 3600,
+              connectTimeout: 3600));
+      if (response.statusCode == 200) {
+        return PlaceInfo.fromJson(response.data);
+      }
+      throw new Exception("");
+    } on DioError catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
+
+  Future<AggregatedWeatherInfoList> weatherForecastByCityIds(
+      List<int> cityIds) async {
+    try {
+      var headers = Map<String, dynamic>();
+      Response response = await this._dio.get(
+          OpenWeatherEndpoint.weatherForecastByCityIds(cityIds),
+          options: Options(
+              headers: headers,
+              followRedirects: false,
+              receiveTimeout: 3600,
+              connectTimeout: 3600));
+      if (response.statusCode == 200) {
+        return AggregatedWeatherInfoList.fromJson(response.data);
+      }
+      throw new Exception("");
+    } on DioError catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
+
+  Future<AggregatedWeatherInfoList> fiveDaysWeatherForecast(int cityId) async {
+    try {
+      var headers = Map<String, dynamic>();
+      Response response = await this._dio.get(
+          OpenWeatherEndpoint.fiveDaysWeatherForecast(cityId),
+          options: Options(
+              headers: headers,
+              followRedirects: false,
+              receiveTimeout: 3600,
+              connectTimeout: 3600));
+      if (response.statusCode == 200) {
+        return AggregatedWeatherInfoList.fromJson(response.data);
+      }
+      throw new Exception("");
+    } on DioError catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;
     }
