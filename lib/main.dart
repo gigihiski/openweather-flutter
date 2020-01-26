@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weatherforecast/blocs/add_location/add_location_page.dart';
 
 import 'package:weatherforecast/blocs/authentication/authentication_bloc.dart';
 import 'package:weatherforecast/blocs/authentication/authentication_state.dart';
@@ -22,6 +23,8 @@ class WeatherForecastApp extends StatelessWidget {
     HelpPage.tag: (context) => HelpPage(),
     WeatherDetailPage.tag: (context) =>
         WeatherDetailPage(title: "Today's Weather"),
+    AddLocationPage.tag: (context) =>
+        AddLocationPage()
   };
 
   // This widget is the root of your application.
