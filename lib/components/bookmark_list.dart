@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -7,16 +8,18 @@ import 'package:weatherforecast/utilities/app_color.dart' as Theme;
 
 class OWBookmarkList extends StatelessWidget {
   OWBookmarkList(
-      {@required this.location,
+      {@required this.icon,
+      @required this.location,
       @required this.temperature,
       @required this.humidity,
       @required this.speed,
       @required this.degree});
 
+  final String icon;
   final String location;
-  final int temperature;
-  final int humidity;
-  final int speed;
+  final double temperature;
+  final double humidity;
+  final double speed;
   final double degree;
 
   EdgeInsets margin = EdgeInsets.only(bottom: 10.0);
@@ -54,8 +57,14 @@ class OWBookmarkList extends StatelessWidget {
                 children: <Widget>[
                   Container(
                       margin: EdgeInsets.only(bottom: 10.0),
-                      child: Image.asset("assets/images/compass_icon.png",
-                          width: 30.0)),
+                      child: CachedNetworkImage(
+                        imageUrl: icon,
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.error),
+                      ),
+                      width: 30.0),
                   Container(
                       child: Text("${temperature.toStringAsFixed(0)}\u00B0C",
                           style: TextStyle(color: Colors.white)))
@@ -72,11 +81,11 @@ class OWBookmarkList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Container(
+                            Expanded(child: Container(
                                 child: Text(location,
                                     style: TextStyle(
                                         fontSize: 16.0,
-                                        fontWeight: FontWeight.bold))),
+                                        fontWeight: FontWeight.bold)))),
                             compassIcon
                           ])),
                   Container(

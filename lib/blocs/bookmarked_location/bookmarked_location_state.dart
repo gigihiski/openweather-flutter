@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:weatherforecast/models/bookmark.dart';
+import 'package:weatherforecast/models/weather.dart';
 
 abstract class BookmarkedLocationState extends Equatable {
   const BookmarkedLocationState();
@@ -20,7 +20,7 @@ class BookmarkedLocationFetching extends BookmarkedLocationState {}
 /// BookmarkedLocationFetched
 /// Bookmarked Location Data has been Fetched
 class BookmarkedLocationFetched extends BookmarkedLocationState {
-  final List<Bookmark> bookmarks;
+  final List<AggregatedWeatherInfo> bookmarks;
 
   BookmarkedLocationFetched({@required this.bookmarks}) : assert(bookmarks != null);
 }

@@ -2,20 +2,19 @@
  * BookmarkedLocationBloc
 */
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_event.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_state.dart';
-import 'package:weatherforecast/models/bookmark.dart';
+import 'package:weatherforecast/models/weather.dart';
 
 import 'package:weatherforecast/repositories/bookmark_repository.dart';
 
 class BookmarkedLocationBloc
     extends Bloc<BookmarkedLocationEvent, BookmarkedLocationState> {
-  final BookmarkRepository bookmarkRepository;
+  BookmarkRepository _bookmarkRepository = BookmarkRepository();
 
-  BookmarkedLocationBloc({
-    @required this.bookmarkRepository,
-  }) : assert(bookmarkRepository != null);
+  BookmarkedLocationBloc() {
+    this._bookmarkRepository = BookmarkRepository();
+  }
 
   @override
   BookmarkedLocationState get initialState => BookmarkedLocationUninitialized();
@@ -27,7 +26,8 @@ class BookmarkedLocationBloc
       yield BookmarkedLocationFetching();
 
       try {
-        List<Bookmark> bookmarks = await bookmarkRepository.getBookmarks();
+        List<AggregatedWeatherInfo> bookmarks =
+            await this._bookmarkRepository.getBookmarks();
         if (bookmarks.length == 0) {
           yield BookmarkedLocationEmpty();
         } else {
