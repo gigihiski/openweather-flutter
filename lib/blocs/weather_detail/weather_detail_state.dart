@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:weatherforecast/models/bookmark.dart';
 import 'package:weatherforecast/models/weather.dart';
 
 abstract class WeatherDetailState extends Equatable {

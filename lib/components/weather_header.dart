@@ -1,11 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weatherforecast/components/weather_component.dart';
+import 'package:weatherforecast/models/place_info.dart';
+import 'package:weatherforecast/models/weather.dart';
 
 import 'package:weatherforecast/utilities/app_color.dart' as AppTheme;
 
 class OWWeatherHeader extends StatelessWidget {
-  OWWeatherHeader();
+  OWWeatherHeader({@required this.info, this.placeInfo});
+
+  final AggregatedWeatherInfo info;
+  final PlaceInfo placeInfo;
 
   EdgeInsets margin;
   EdgeInsets padding = EdgeInsets.all(10.0);
@@ -13,14 +19,14 @@ class OWWeatherHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OWWeatherComponent tempComponent =
-        OWWeatherComponent(title: "Temperature", value: "30\u00B0C");
-    OWWeatherComponent humidityComponent =
-        OWWeatherComponent(title: "Humidity", value: "68%");
-    OWWeatherComponent rainChancesComponent =
-        OWWeatherComponent(title: "Rain Chances", value: "68%");
-    OWWeatherComponent windSpeedComponent =
-        OWWeatherComponent(title: "Wind Speed", value: "1 m/s");
+    OWWeatherComponent tempComponent = OWWeatherComponent(
+        title: "Temperature", value: "${info.mainInfo.temperature}\u00B0C");
+    OWWeatherComponent humidityComponent = OWWeatherComponent(
+        title: "Humidity", value: "${info.mainInfo.humidity}%");
+    OWWeatherComponent rainChancesComponent = OWWeatherComponent(
+        title: "Rain Chances", value: "${info.cloud.cloudinessPercentage}%");
+    OWWeatherComponent windSpeedComponent = OWWeatherComponent(
+        title: "Wind Speed", value: "${info.wind.speed} m/s");
 
     return Container(
       margin: margin,
@@ -46,22 +52,27 @@ class OWWeatherHeader extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Container(
-                          child: Text("Ngasin",
+                          child: Text(placeInfo.name,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold))),
                       Container(
-                          child: Text("Light Rain",
+                          child: Text(info.weathers[0].condition,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 12.0,
                                   fontWeight: FontWeight.bold)),
                           margin: EdgeInsets.only(top: 3.0)),
                       Container(
-                          child: Text("Light Rain",
-                              style: TextStyle(color: Colors.white)),
-                          margin: EdgeInsets.only(top: 10.0))
+                          child: CachedNetworkImage(
+                            imageUrl: info.weathers[0].iconURL,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                          width: 50.0),
                     ],
                   ))),
           Container(

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weatherforecast/components/weather_component.dart';
+import 'package:weatherforecast/models/weather.dart';
 
 import 'package:weatherforecast/utilities/app_color.dart' as AppTheme;
 
 class OWWeatherList extends StatelessWidget {
-  OWWeatherList();
+  OWWeatherList({@required this.info});
+
+  final AggregatedWeatherInfo info;
 
   EdgeInsets margin = EdgeInsets.only(top: 10.0);
   EdgeInsets padding = EdgeInsets.all(5.0);
@@ -13,14 +16,14 @@ class OWWeatherList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OWWeatherComponent tempComponent =
-        OWWeatherComponent(title: "Temperature", value: "30\u00B0C");
-    OWWeatherComponent humidityComponent =
-        OWWeatherComponent(title: "Humidity", value: "68%");
+    OWWeatherComponent tempComponent = OWWeatherComponent(
+        title: "Temperature", value: "${info.mainInfo.temperature}\u00B0C");
+    OWWeatherComponent humidityComponent = OWWeatherComponent(
+        title: "Humidity", value: "${info.mainInfo.humidity}%");
     OWWeatherComponent rainChancesComponent =
-        OWWeatherComponent(title: "Rain Chances", value: "68%");
-    OWWeatherComponent windSpeedComponent =
-        OWWeatherComponent(title: "Wind Speed", value: "1 m/s");
+        OWWeatherComponent(title: "Rain Chances", value: "${info.cloud.cloudinessPercentage}%");
+    OWWeatherComponent windSpeedComponent = OWWeatherComponent(
+        title: "Wind Speed", value: "${info.wind.speed} m/s");
 
     return Container(
       decoration: BoxDecoration(
@@ -34,7 +37,7 @@ class OWWeatherList extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-              child: Text("15 Jan 2020 11:00",
+              child: Text(info.timestamp.toLocal().toString(),
                   style: TextStyle(color: Colors.white)),
               alignment: Alignment.centerLeft),
           Container(

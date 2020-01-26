@@ -8,11 +8,13 @@ abstract class WeatherDetailEvent extends Equatable {
 }
 
 class WeatherDetailFetch extends WeatherDetailEvent {
-  const WeatherDetailFetch();
+  final int cityId;
+
+  const WeatherDetailFetch({this.cityId});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [cityId];
 
   @override
-  String toString() => 'Fetch { }';
+  String toString() => 'WeatherDetailFetch { cityId: $cityId }';
 }
