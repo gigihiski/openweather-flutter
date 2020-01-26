@@ -1,16 +1,24 @@
 # weatherforecast
 
-A new Flutter project.
+Open Weather Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Change Production and Development environment value on **lib/envs** folder
+File Locations:
+`lib/envs/development.dart` and `lib/env/production.dart`
 
-A few resources to get you started if this is your first Flutter project:
+2. Change the GoogleMapApiKey value inside **android** folder
+File Location:
+`android/key.properties`
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+3. Check your active Devices or Simulators
+`flutter devices`
+It will shows a result like this (the example is using real device):
+    1 connected device:
+    SM A310F • 31003f38ffcb8215 • android-arm • Android 7.0 (API 24)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. Select Device or Simulator ID from the result above and **Run Flutter**
+`flutter run -t [YOUR_ENVIRONMENT_FILE] -d [DEVICE_ID]`
+example:
+`flutter run -t lib/envs/development.dart -d 31003f38ffcb8215`
