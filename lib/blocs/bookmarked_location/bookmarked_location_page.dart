@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_bloc.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_event.dart';
 import 'package:weatherforecast/blocs/bookmarked_location/bookmarked_location_state.dart';
@@ -19,6 +20,9 @@ class BookmarkedLocationPage extends StatelessWidget {
 
   /// Page Title
   final String title;
+
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,7 @@ class BookmarkedLocationPage extends StatelessWidget {
                 return Center(child: CircularProgressIndicator());
               } else if (state is BookmarkedLocationFetched) {
                 return _buildBookmarkedLocationWidget(
-                    _bookmarkedLocationBloc, state.bookmarks);
+                    context, _bookmarkedLocationBloc, state.bookmarks, state);
               }
               return Center(
                   child: Container(
@@ -70,50 +74,62 @@ class BookmarkedLocationPage extends StatelessWidget {
   }
 
   Widget _buildBookmarkedLocationWidget(
-      BookmarkedLocationBloc bloc, List<AggregatedWeatherInfo> bookmarks) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: bookmarks.length,
-      itemBuilder: (BuildContext context, int index) {
-        AggregatedWeatherInfo bookmark = bookmarks[index];
+      BuildContext context,
+      BookmarkedLocationBloc bloc,
+      List<AggregatedWeatherInfo> bookmarks,
+      BookmarkedLocationState state) {
+    return SmartRefresher(
+        controller: _refreshController,
+        onRefresh: () async {
+          /// Refesh
+          bloc.add(Fetch());
+          if (state is BookmarkedLocationFetched) {
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text("Weather Information Updated")));
+            _refreshController.refreshCompleted();
+          } else {
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text("Failed to Refresh")));
+            _refreshController.refreshFailed();
+          }
+        },
+        enablePullDown: true,
+        enablePullUp: true,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: bookmarks.length,
+          itemBuilder: (BuildContext context, int index) {
+            AggregatedWeatherInfo bookmark = bookmarks[index];
 
-        return Dismissible(
-          // Each Dismissible must contain a Key. Keys allow Flutter to
-          // uniquely identify widgets.
-          key: Key(bookmark.cityId.toString()),
-          // Provide a function that tells the app
-          // what to do after an item has been swiped away.
-          onDismissed: (direction) {
-            // Remove the item from the data source.
-            bloc.add(RemoveBookmarkedItem(cityId: bookmark.cityId));
-
-            // Then show a snackbar.
-            Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text("${bookmark.cityName} has been Removed")));
+            return Dismissible(
+              key: Key(bookmark.cityId.toString()),
+              onDismissed: (direction) {
+                bloc.add(RemoveBookmarkedItem(cityId: bookmark.cityId));
+                Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text("${bookmark.cityName} has been Removed")));
+              },
+              background: Container(color: Colors.red),
+              child: GestureDetector(
+                  child: OWBookmarkList(
+                      icon: bookmark.weathers[0].iconURL,
+                      location: bookmark.cityName,
+                      temperature: bookmark.mainInfo.temperature,
+                      humidity: bookmark.mainInfo.humidity,
+                      speed: bookmark.wind.speed,
+                      degree: bookmark.wind.degree),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WeatherDetailPage(
+                              title: "Today's Weather",
+                              placeInfo: PlaceInfo(
+                                  identifier: bookmark.cityId,
+                                  name: bookmark.cityName))),
+                    );
+                  }),
+            );
           },
-          // Show a red background as the item is swiped away.
-          background: Container(color: Colors.red),
-          child: GestureDetector(
-              child: OWBookmarkList(
-                  icon: bookmark.weathers[0].iconURL,
-                  location: bookmark.cityName,
-                  temperature: bookmark.mainInfo.temperature,
-                  humidity: bookmark.mainInfo.humidity,
-                  speed: bookmark.wind.speed,
-                  degree: bookmark.wind.degree),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WeatherDetailPage(
-                          title: "Today's Weather",
-                          placeInfo: PlaceInfo(
-                              identifier: bookmark.cityId,
-                              name: bookmark.cityName))),
-                );
-              }),
-        );
-      },
-    );
+        ));
   }
 }

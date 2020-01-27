@@ -48,6 +48,9 @@ dependencies:
   # Date Format
   intl: ^0.16.1
 
+  # Pull to Refresh
+  pull_to_refresh: ^1.5.8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
