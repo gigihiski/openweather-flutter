@@ -20,11 +20,11 @@ class OWWeatherHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     OWWeatherComponent tempComponent = OWWeatherComponent(
-        title: "Temperature", value: "${info.mainInfo.temperature}\u00B0C");
+        title: "Temperature", value: "${info.mainInfo.temperature.roundToDouble().toStringAsFixed(0)}\u00B0C");
     OWWeatherComponent humidityComponent = OWWeatherComponent(
-        title: "Humidity", value: "${info.mainInfo.humidity}%");
+        title: "Humidity", value: "${info.mainInfo.humidity.roundToDouble().toStringAsFixed(0)}%");
     OWWeatherComponent rainChancesComponent = OWWeatherComponent(
-        title: "Rain Chances", value: "${info.cloud.cloudinessPercentage}%");
+        title: "Rain Chances", value: "${info.cloud.cloudinessPercentage.roundToDouble().toStringAsFixed(0)}%");
     OWWeatherComponent windSpeedComponent = OWWeatherComponent(
         title: "Wind Speed", value: "${info.wind.speed} m/s");
 
