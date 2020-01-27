@@ -84,8 +84,8 @@ class BookmarkedLocationPage extends StatelessWidget {
           /// Refesh
           bloc.add(Fetch());
           if (state is BookmarkedLocationFetched) {
-            Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text("Weather Information Updated")));
+            Scaffold.of(context).showSnackBar(
+                SnackBar(content: Text("Weather Information Updated")));
             _refreshController.refreshCompleted();
           } else {
             Scaffold.of(context)
@@ -110,13 +110,7 @@ class BookmarkedLocationPage extends StatelessWidget {
               },
               background: Container(color: Colors.red),
               child: GestureDetector(
-                  child: OWBookmarkList(
-                      icon: bookmark.weathers[0].iconURL,
-                      location: bookmark.cityName,
-                      temperature: bookmark.mainInfo.temperature,
-                      humidity: bookmark.mainInfo.humidity,
-                      speed: bookmark.wind.speed,
-                      degree: bookmark.wind.degree),
+                  child: OWBookmarkList(info: bookmark),
                   onTap: () {
                     Navigator.push(
                       context,

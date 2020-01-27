@@ -2,25 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
+import 'package:weatherforecast/models/weather.dart';
 import 'dart:math' as math;
 
 import 'package:weatherforecast/utilities/app_color.dart' as Theme;
 
 class OWBookmarkList extends StatelessWidget {
-  OWBookmarkList(
-      {@required this.icon,
-      @required this.location,
-      @required this.temperature,
-      @required this.humidity,
-      @required this.speed,
-      @required this.degree});
+  OWBookmarkList({@required this.info});
 
-  final String icon;
-  final String location;
-  final double temperature;
-  final double humidity;
-  final double speed;
-  final double degree;
+  final AggregatedWeatherInfo info;
 
   EdgeInsets margin = EdgeInsets.only(bottom: 10.0);
   Color color = Theme.AppColor.positiveGreen[900];
@@ -28,7 +18,7 @@ class OWBookmarkList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var compassIcon = Transform.rotate(
-        angle: degree * math.pi / 180,
+        angle: info.wind.degree * math.pi / 180,
         child: Image.asset("assets/images/compass_icon.png", width: 40.0));
 
     var waterIcon = Container(
@@ -58,15 +48,15 @@ class OWBookmarkList extends StatelessWidget {
                   Container(
                       margin: EdgeInsets.only(bottom: 10.0),
                       child: CachedNetworkImage(
-                        imageUrl: icon,
+                        imageUrl: info.weathers[0].iconURL,
                         placeholder: (context, url) =>
                             CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.error),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                       width: 30.0),
                   Container(
-                      child: Text("${temperature.toStringAsFixed(0)}\u00B0C",
+                      child: Text(
+                          "${info.mainInfo.temperature.toStringAsFixed(0)}\u00B0C",
                           style: TextStyle(color: Colors.white)))
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -81,11 +71,12 @@ class OWBookmarkList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Expanded(child: Container(
-                                child: Text(location,
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold)))),
+                            Expanded(
+                                child: Container(
+                                    child: Text(info.cityName,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold)))),
                             compassIcon
                           ])),
                   Container(
@@ -95,9 +86,10 @@ class OWBookmarkList extends StatelessWidget {
                           children: <Widget>[
                             Row(children: <Widget>[
                               waterIcon,
-                              Text("${humidity.toStringAsFixed(0)} %")
+                              Text(
+                                  "${info.mainInfo.humidity.toStringAsFixed(0)} %")
                             ]),
-                            Text("${speed.toStringAsFixed(0)} m/s")
+                            Text("${info.wind.speed.toStringAsFixed(0)} m/s")
                           ])),
                 ]),
           )

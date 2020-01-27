@@ -65,7 +65,7 @@ class AddLocationPage extends StatelessWidget {
                         onMapCreated: (GoogleMapController controller) {
                           _controller.complete(controller);
                         },
-                        onLongPress: (LatLng position) {
+                        onTap: (LatLng position) {
                           _addLocationBloc.add(MapMarkerClicked());
                           BlocProvider.of<AddLocationBloc>(context).add(
                             MapLongPressed(
