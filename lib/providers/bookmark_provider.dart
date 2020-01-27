@@ -39,4 +39,11 @@ class BookmarkAPIProvider {
 
     await database.locationDao.insertLocation(location);
   }
+
+  Future<void> removeBookmark(int cityId) async {
+    final database =
+        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+
+    await database.locationDao.deleteLocationByCityId(cityId);
+  }
 }

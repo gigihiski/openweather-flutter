@@ -11,7 +11,7 @@ abstract class LocationDao {
   @Query('SELECT * FROM Location')
   Stream<List<Location>> findAllLocationsAsStream();
 
-  @Query('SELECT * FROM Location WHERE id = :id')
+  @Query('SELECT * FROM Location WHERE cityId = :id')
   Future<Location> findLocationByCityId(int cityId);
 
   @insert
@@ -19,4 +19,7 @@ abstract class LocationDao {
 
   @Query('DELETE FROM Location')
   Future<void> deleteAllLocations();
+
+  @Query('DELETE FROM Location WHERE cityId = :id')
+  Future<void> deleteLocationByCityId(int cityId);
 }

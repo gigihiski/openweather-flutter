@@ -16,3 +16,15 @@ class Fetch extends BookmarkedLocationEvent {
   @override
   String toString() => 'Fetch { }';
 }
+
+class RemoveBookmarkedItem extends BookmarkedLocationEvent {
+  final int cityId;
+
+  const RemoveBookmarkedItem({this.cityId});
+
+  @override
+  List<Object> get props => [cityId];
+
+  @override
+  String toString() => 'RemoveBookmarkedItem { cityId: $cityId }';
+}

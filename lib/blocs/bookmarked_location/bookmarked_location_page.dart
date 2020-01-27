@@ -55,7 +55,8 @@ class BookmarkedLocationPage extends StatelessWidget {
                   state is BookmarkedLocationFetching) {
                 return Center(child: CircularProgressIndicator());
               } else if (state is BookmarkedLocationFetched) {
-                return _buildBookmarkedLocationWidget(state.bookmarks);
+                return _buildBookmarkedLocationWidget(
+                    _bookmarkedLocationBloc, state.bookmarks);
               }
               return Center(
                   child: Container(
@@ -68,31 +69,50 @@ class BookmarkedLocationPage extends StatelessWidget {
         ));
   }
 
-  Widget _buildBookmarkedLocationWidget(List<AggregatedWeatherInfo> bookmarks) {
+  Widget _buildBookmarkedLocationWidget(
+      BookmarkedLocationBloc bloc, List<AggregatedWeatherInfo> bookmarks) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: bookmarks.length,
       itemBuilder: (BuildContext context, int index) {
         AggregatedWeatherInfo bookmark = bookmarks[index];
-        return GestureDetector(
-            child: OWBookmarkList(
-                icon: bookmark.weathers[0].iconURL,
-                location: bookmark.cityName,
-                temperature: bookmark.mainInfo.temperature,
-                humidity: bookmark.mainInfo.humidity,
-                speed: bookmark.wind.speed,
-                degree: bookmark.wind.degree),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => WeatherDetailPage(
-                        title: "Today's Weather",
-                        placeInfo: PlaceInfo(
-                            identifier: bookmark.cityId,
-                            name: bookmark.cityName))),
-              );
-            });
+
+        return Dismissible(
+          // Each Dismissible must contain a Key. Keys allow Flutter to
+          // uniquely identify widgets.
+          key: Key(bookmark.cityId.toString()),
+          // Provide a function that tells the app
+          // what to do after an item has been swiped away.
+          onDismissed: (direction) {
+            // Remove the item from the data source.
+            bloc.add(RemoveBookmarkedItem(cityId: bookmark.cityId));
+
+            // Then show a snackbar.
+            Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text("${bookmark.cityName} has been Removed")));
+          },
+          // Show a red background as the item is swiped away.
+          background: Container(color: Colors.red),
+          child: GestureDetector(
+              child: OWBookmarkList(
+                  icon: bookmark.weathers[0].iconURL,
+                  location: bookmark.cityName,
+                  temperature: bookmark.mainInfo.temperature,
+                  humidity: bookmark.mainInfo.humidity,
+                  speed: bookmark.wind.speed,
+                  degree: bookmark.wind.degree),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WeatherDetailPage(
+                          title: "Today's Weather",
+                          placeInfo: PlaceInfo(
+                              identifier: bookmark.cityId,
+                              name: bookmark.cityName))),
+                );
+              }),
+        );
       },
     );
   }

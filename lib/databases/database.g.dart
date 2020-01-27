@@ -131,13 +131,19 @@ class _$LocationDao extends LocationDao {
 
   @override
   Future<Location> findLocationByCityId(int cityId) async {
-    return _queryAdapter.query('SELECT * FROM Location WHERE id = ?',
+    return _queryAdapter.query('SELECT * FROM Location WHERE cityId = ?',
         arguments: <dynamic>[cityId], mapper: _locationMapper);
   }
 
   @override
   Future<void> deleteAllLocations() async {
     await _queryAdapter.queryNoReturn('DELETE FROM Location');
+  }
+
+  @override
+  Future<void> deleteLocationByCityId(int cityId) async {
+    await _queryAdapter.queryNoReturn('DELETE FROM Location WHERE cityId = ?',
+        arguments: <dynamic>[cityId]);
   }
 
   @override

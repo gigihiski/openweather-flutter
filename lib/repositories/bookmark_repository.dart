@@ -14,4 +14,9 @@ class BookmarkRepository {
   Future<void> createBookmark(PlaceInfo placeInfo) async {
     return _apiProvider.createBookmark(placeInfo);
   }
+
+  // Remove a Bookmarked Location
+  Future<void> removeBookmark(int cityId) async {
+    return _apiProvider.removeBookmark(cityId);
+  }
 }

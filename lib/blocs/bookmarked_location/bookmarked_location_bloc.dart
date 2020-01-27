@@ -36,6 +36,19 @@ class BookmarkedLocationBloc
       } catch (error) {
         yield BookmarkedLocationFailure(error: error.toString());
       }
+    } else if (event is RemoveBookmarkedItem) {
+      try {
+        await this._bookmarkRepository.removeBookmark(event.cityId);
+        List<AggregatedWeatherInfo> bookmarks =
+            await this._bookmarkRepository.getBookmarks();
+        if (bookmarks.length == 0) {
+          yield BookmarkedLocationEmpty();
+        } else {
+          yield BookmarkedLocationFetched(bookmarks: bookmarks);
+        }
+      } catch (error) {
+        yield BookmarkedLocationFailure(error: error.toString());
+      }
     }
   }
 }
