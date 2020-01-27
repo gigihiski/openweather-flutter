@@ -16,6 +16,7 @@ class OWWeatherList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     OWWeatherComponent tempComponent = OWWeatherComponent(
         title: "Temperature", value: "${info.mainInfo.temperature}\u00B0C");
     OWWeatherComponent humidityComponent = OWWeatherComponent(
@@ -37,7 +38,7 @@ class OWWeatherList extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-              child: Text(info.timestamp.toLocal().toString(),
+              child: Text(info.date,
                   style: TextStyle(color: Colors.white)),
               alignment: Alignment.centerLeft),
           Container(

@@ -45,6 +45,9 @@ dependencies:
   # Image from Internet
   cached_network_image: ^2.0.0
 
+  # Date Format
+  intl: ^0.16.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

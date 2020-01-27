@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
+
 import 'package:weatherforecast/models/cloud.dart';
 import 'package:weatherforecast/models/main_info.dart';
 import 'package:weatherforecast/models/wind.dart';
@@ -41,11 +43,11 @@ class AggregatedWeatherInfo extends Equatable {
   MainInfo mainInfo;
   int cityId;
   String cityName;
-  DateTime timestamp;
+  String date;
 
   @override
   List<Object> get props =>
-      [weathers, cloud, wind, mainInfo, cityId, cityName, timestamp];
+      [weathers, cloud, wind, mainInfo, cityId, cityName, date];
 
   AggregatedWeatherInfo(
       {this.weathers,
@@ -54,7 +56,7 @@ class AggregatedWeatherInfo extends Equatable {
       this.mainInfo,
       this.cityId,
       this.cityName,
-      this.timestamp});
+      this.date});
 
   factory AggregatedWeatherInfo.fromJson(Map<String, dynamic> data) {
     List weatherList = data['weather'] as List;
@@ -66,7 +68,11 @@ class AggregatedWeatherInfo extends Equatable {
     MainInfo mainInfo = MainInfo.fromJson(data['main']);
     int cityId = data['id'] as int;
     String cityName = data['name'] as String;
-    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(data['dt'] as int);
+
+    /// Formatting Time
+    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(data['dt'].toString()) * 1000);
+    String date = DateFormat('dd-MM-yyyy kk:mm').format(timestamp);
 
     return AggregatedWeatherInfo(
         weathers: weathers,
@@ -75,7 +81,7 @@ class AggregatedWeatherInfo extends Equatable {
         mainInfo: mainInfo,
         cityId: cityId,
         cityName: cityName,
-        timestamp: timestamp);
+        date: date);
   }
 }
 
